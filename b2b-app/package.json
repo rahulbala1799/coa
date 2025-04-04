@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "create-admin": "ts-node scripts/create-admin.ts"
+    "create-admin": "ts-node scripts/create-admin.ts",
+    "add-sample-products": "ts-node scripts/add-sample-products.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",

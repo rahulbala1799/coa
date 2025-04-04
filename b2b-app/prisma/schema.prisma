@@ -25,6 +25,7 @@ model Product {
   price       Decimal
   imageUrl    String?
   sku         String      @unique
+  category    ProductCategory @default(OTHER)
   inventory   Int         @default(0)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -77,4 +78,11 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELLED
+}
+
+enum ProductCategory {
+  PACKAGING
+  LEAFLETS
+  WIDE_FORMAT
+  OTHER
 }
