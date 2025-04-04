@@ -30,6 +30,17 @@ function validatePassword(password: string): { isValid: boolean; error?: string 
 
 export async function POST(request: NextRequest) {
   try {
+    // Allow direct registration in production if special header is present
+    if (process.env.NODE_ENV === 'production') {
+      const bypassAuth = request.headers.get('x-bypass-auth');
+      if (!bypassAuth || bypassAuth !== 'true') {
+        return NextResponse.json(
+          { error: 'Direct registration not allowed in production' },
+          { status: 403 }
+        );
+      }
+    }
+
     const body = await request.json();
     const { name, email, password } = body;
 
