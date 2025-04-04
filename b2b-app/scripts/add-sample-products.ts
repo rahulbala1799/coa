@@ -2,14 +2,23 @@ import { PrismaClient } from '@prisma/client';
 
 const db = new PrismaClient();
 
-const sampleProducts = [
+type ProductInput = {
+  name: string;
+  description: string;
+  price: number;
+  sku: string;
+  category: 'PACKAGING' | 'LEAFLETS' | 'WIDE_FORMAT' | 'OTHER';
+  inventory: number;
+};
+
+const sampleProducts: ProductInput[] = [
   // Paper Bags
   {
     name: "Kraft Paper Flat Handle Bag - Small",
     description: "High-quality kraft paper bags with flat handles. Perfect for takeaway and retail. Size: 22x18x8cm. 90gsm brown kraft paper. Pack of 250.",
     price: 12.99,
     sku: "FHB-S-250",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 500
   },
   {
@@ -17,7 +26,7 @@ const sampleProducts = [
     description: "Medium-sized kraft paper bags with flat handles. Ideal for larger takeaway orders. Size: 32x25x11cm. 100gsm brown kraft paper. Pack of 200.",
     price: 15.99,
     sku: "FHB-M-200",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 400
   },
   {
@@ -25,7 +34,7 @@ const sampleProducts = [
     description: "Premium twisted handle paper bags in white. Perfect for luxury food retail. Size: 40x32x12cm. 120gsm white kraft paper. Pack of 150.",
     price: 18.99,
     sku: "THB-L-150",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 300
   },
   {
@@ -33,7 +42,7 @@ const sampleProducts = [
     description: "Self-standing SOS paper bags. Ideal for takeaway food. Size: 18x12x24cm. 80gsm brown kraft paper. Pack of 500.",
     price: 14.99,
     sku: "SOS-S-500",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 1000
   },
   {
@@ -41,7 +50,7 @@ const sampleProducts = [
     description: "Large self-standing SOS paper bags. Perfect for multiple food items. Size: 26x17x25cm. 90gsm brown kraft paper. Pack of 400.",
     price: 16.99,
     sku: "SOS-L-400",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 800
   },
   // Pizza Boxes
@@ -50,7 +59,7 @@ const sampleProducts = [
     description: "Corrugated pizza boxes for personal size pizzas. E-flute cardboard. Plain brown. Pack of 100.",
     price: 8.99,
     sku: "PB-7-100",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 1200
   },
   {
@@ -58,7 +67,7 @@ const sampleProducts = [
     description: "Standard pizza boxes for medium pizzas. E-flute cardboard with steam vents. Plain brown. Pack of 100.",
     price: 11.99,
     sku: "PB-10-100",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 1000
   },
   {
@@ -66,7 +75,7 @@ const sampleProducts = [
     description: "Large pizza boxes with steam vents. E-flute cardboard. Plain brown. Pack of 100.",
     price: 13.99,
     sku: "PB-12-100",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 800
   },
   {
@@ -74,7 +83,7 @@ const sampleProducts = [
     description: "Premium quality pizza boxes for extra-large pizzas. B-flute cardboard with enhanced ventilation. Custom print available. Pack of 100.",
     price: 16.99,
     sku: "PB-14-100",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 600
   },
   // Burger Boxes
@@ -83,7 +92,7 @@ const sampleProducts = [
     description: "Standard burger boxes with secure closure. Size: 10x10x7cm. Food-grade cardboard. Pack of 500.",
     price: 19.99,
     sku: "BB-R-500",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 1500
   },
   {
@@ -91,7 +100,7 @@ const sampleProducts = [
     description: "Large burger boxes for gourmet burgers. Size: 15x15x8cm. Premium food-grade cardboard. Pack of 400.",
     price: 22.99,
     sku: "BB-L-400",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 1200
   },
   {
@@ -99,7 +108,7 @@ const sampleProducts = [
     description: "Eco-friendly bagasse burger boxes. Size: 15x15x8cm. 100% biodegradable and compostable. Pack of 300.",
     price: 24.99,
     sku: "BBB-R-300",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 600
   },
   {
@@ -107,7 +116,7 @@ const sampleProducts = [
     description: "Large eco-friendly bagasse burger boxes with divider. Size: 20x20x10cm. 100% biodegradable. Pack of 250.",
     price: 27.99,
     sku: "BBB-L-250",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 400
   },
   // Specialty Items
@@ -116,7 +125,7 @@ const sampleProducts = [
     description: "Multi-purpose kraft food box with PLA window. Size: 15x12x5cm. Perfect for sandwiches and salads. Pack of 300.",
     price: 21.99,
     sku: "KFB-W-300",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 700
   },
   {
@@ -124,7 +133,7 @@ const sampleProducts = [
     description: "Sustainable food container made from recycled materials. Size: 18x13x6cm. Leak-resistant. Pack of 250.",
     price: 23.99,
     sku: "EFC-250",
-    category: "PACKAGING",
+    category: 'PACKAGING',
     inventory: 500
   }
 ];
