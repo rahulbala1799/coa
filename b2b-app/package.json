@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "POSTGRES_PRISMA_URL=\"$DATABASE_URL\" POSTGRES_URL_NON_POOLING=\"$DATABASE_URL_UNPOOLED\" prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
