@@ -1,11 +1,25 @@
 {
   "version": 2,
+  "buildCommand": "cd b2b-app && npm install && npm run build",
+  "outputDirectory": "b2b-app/.next",
   "framework": "nextjs",
   "regions": ["iad1"],
   "env": {
     "NEXT_PUBLIC_VERCEL_URL": "${VERCEL_URL}",
+    "DATABASE_URL": "${DATABASE_URL}",
+    "DATABASE_URL_UNPOOLED": "${DATABASE_URL_UNPOOLED}",
+    "JWT_SECRET": "${JWT_SECRET}",
     "POSTGRES_PRISMA_URL": "${DATABASE_URL}",
-    "POSTGRES_URL_NON_POOLING": "${DATABASE_URL_UNPOOLED}",
-    "JWT_SECRET": "${JWT_SECRET}"
+    "POSTGRES_URL_NON_POOLING": "${DATABASE_URL_UNPOOLED}"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_VERCEL_URL": "${VERCEL_URL}",
+      "DATABASE_URL": "${DATABASE_URL}",
+      "DATABASE_URL_UNPOOLED": "${DATABASE_URL_UNPOOLED}",
+      "JWT_SECRET": "${JWT_SECRET}",
+      "POSTGRES_PRISMA_URL": "${DATABASE_URL}",
+      "POSTGRES_URL_NON_POOLING": "${DATABASE_URL_UNPOOLED}"
+    }
   }
 } 
