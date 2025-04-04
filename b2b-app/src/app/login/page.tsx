@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { api } from '@/lib/api';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,22 +25,13 @@ export default function LoginPage() {
       setLoading(true);
       setError('');
       
-      const response = await fetch('/api/auth/login', {
+      const data = await api('/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        body: { email, password },
       });
       
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-      
-      // Store token in localStorage
-      localStorage.setItem('token', data.token);
+      // Store access token in localStorage
+      localStorage.setItem('accessToken', data.accessToken);
       
       // Redirect based on user role
       if (data.user.role === 'ADMIN') {
