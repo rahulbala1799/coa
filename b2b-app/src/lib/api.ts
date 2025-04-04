@@ -16,12 +16,16 @@ export async function api(endpoint: string, options: ApiOptions = {}) {
   };
 
   try {
+    console.log(`Making API request to: /api${endpoint}`);
     const response = await fetch(`/api${endpoint}`, {
       method: options.method || 'GET',
       headers,
       body: options.body ? JSON.stringify(options.body) : undefined,
       credentials: 'include', // This is important for cookies
     });
+
+    const data = await response.json().catch(() => null);
+    console.log('API response:', { status: response.status, data });
 
     // If the response is a redirect, follow it
     if (response.redirected) {
@@ -36,10 +40,8 @@ export async function api(endpoint: string, options: ApiOptions = {}) {
       return;
     }
 
-    const data = await response.json();
-
     if (!response.ok) {
-      throw new Error(data.error || 'API request failed');
+      throw new Error(data?.error || `API request failed with status ${response.status}`);
     }
 
     return data;

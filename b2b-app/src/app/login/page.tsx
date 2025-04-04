@@ -25,10 +25,13 @@ export default function LoginPage() {
       setLoading(true);
       setError('');
       
+      console.log('Attempting login with:', { email });
       const data = await api('/auth/login', {
         method: 'POST',
         body: { email, password },
       });
+      
+      console.log('Login successful:', { role: data.user.role });
       
       // Store access token in localStorage
       localStorage.setItem('accessToken', data.accessToken);
@@ -40,7 +43,8 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     } catch (err) {
-      setError((err as Error).message);
+      console.error('Login failed:', err);
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }
