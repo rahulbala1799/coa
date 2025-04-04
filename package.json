@@ -1,0 +1,13 @@
+{
+  "name": "coa-project",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "b2b-app"
+  ],
+  "scripts": {
+    "build": "cd b2b-app && npm run build",
+    "start": "cd b2b-app && npm run start",
+    "dev": "cd b2b-app && npm run dev"
+  }
+} 
