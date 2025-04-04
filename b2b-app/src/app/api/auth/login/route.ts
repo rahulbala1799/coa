@@ -6,9 +6,12 @@ import { checkRateLimit } from '@/lib/rateLimit';
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Login attempt received');
+    
     // Check rate limiting
     const rateLimitResult = checkRateLimit(request);
     if (rateLimitResult.blocked) {
+      console.log('Rate limit exceeded:', rateLimitResult);
       return NextResponse.json(
         { 
           error: 'Too many login attempts. Please try again later.',
@@ -20,9 +23,11 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { email, password } = body;
+    console.log('Login attempt for email:', email);
 
     // Validation
     if (!email || !password) {
+      console.log('Missing email or password');
       return NextResponse.json(
         { error: 'Email and password are required' },
         { status: 400 }
@@ -30,20 +35,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user exists
+    console.log('Checking if user exists');
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
     if (!user) {
+      console.log('User not found');
       return NextResponse.json(
         { error: 'Invalid email or password' },
         { status: 401 }
       );
     }
 
+    console.log('User found, verifying password');
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      console.log('Invalid password');
       return NextResponse.json(
         { 
           error: 'Invalid email or password',
@@ -53,6 +62,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('Password verified, generating tokens');
     // Generate access token (short-lived)
     const accessToken = jwt.sign(
       {
@@ -75,6 +85,7 @@ export async function POST(request: NextRequest) {
       { expiresIn: '7d' }
     );
 
+    console.log('Tokens generated, creating response');
     // Set refresh token in HTTP-only cookie
     const response = NextResponse.json({
       user: {
@@ -94,9 +105,20 @@ export async function POST(request: NextRequest) {
       path: '/',
     });
 
+    console.log('Login successful');
     return response;
   } catch (error) {
     console.error('Error logging in:', error);
-    return NextResponse.json({ error: 'Error logging in' }, { status: 500 });
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+    }
+    return NextResponse.json({ 
+      error: 'Error logging in',
+      details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined
+    }, { status: 500 });
   }
 } 

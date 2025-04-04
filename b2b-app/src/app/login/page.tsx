@@ -26,7 +26,7 @@ export default function LoginPage() {
       setError('');
       
       console.log('Attempting login with:', { email });
-      const data = await api('/auth/login', {
+      const data = await api('/api/auth/login', {
         method: 'POST',
         body: { email, password },
       });

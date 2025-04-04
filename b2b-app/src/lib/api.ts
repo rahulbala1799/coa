@@ -16,8 +16,12 @@ export async function api(endpoint: string, options: ApiOptions = {}) {
   };
 
   try {
-    console.log(`Making API request to: /api${endpoint}`);
-    const response = await fetch(`/api${endpoint}`, {
+    // Remove any leading /api if present
+    const cleanEndpoint = endpoint.replace(/^\/api/, '');
+    const url = `/api${cleanEndpoint}`;
+    
+    console.log(`Making API request to: ${url}`);
+    const response = await fetch(url, {
       method: options.method || 'GET',
       headers,
       body: options.body ? JSON.stringify(options.body) : undefined,
