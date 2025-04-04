@@ -1,43 +1,53 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+// Use production database URL
+const db = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL
+    }
+  }
+});
 
-async function createAdmin() {
+async function main() {
+  const email = 'admin@printnpack.com';
+  const password = 'Admin@123';
+
   try {
-    const email = 'admin@printnpack.com';
-    const password = 'Admin@123';
-    const name = 'Admin';
-
-    // Check if admin exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
+    const existingAdmin = await db.user.findUnique({
+      where: { email }
     });
 
-    if (existingUser) {
+    if (existingAdmin) {
       console.log('Admin user already exists');
       return;
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Create admin user
-    const user = await prisma.user.create({
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const admin = await db.user.create({
       data: {
-        name,
         email,
         password: hashedPassword,
-        role: 'ADMIN',
-      },
+        name: 'Admin User',
+        role: 'ADMIN'
+      }
     });
 
-    console.log('Admin user created successfully:', user);
+    console.log('Admin user created successfully:', {
+      id: admin.id,
+      email: admin.email,
+      name: admin.name,
+      role: admin.role
+    });
   } catch (error) {
     console.error('Error creating admin user:', error);
-  } finally {
-    await prisma.$disconnect();
+    process.exit(1);
   }
 }
 
-createAdmin(); 
+main()
+  .catch(console.error)
+  .finally(async () => {
+    await db.$disconnect();
+  }); 
