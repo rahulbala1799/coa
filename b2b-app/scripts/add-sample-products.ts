@@ -1,6 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const db = new PrismaClient();
 
 const sampleProducts = [
   // Paper Bags
@@ -134,12 +134,12 @@ async function main() {
 
   for (const product of sampleProducts) {
     try {
-      const existingProduct = await prisma.product.findUnique({
+      const existingProduct = await db.product.findUnique({
         where: { sku: product.sku },
       });
 
       if (!existingProduct) {
-        await prisma.product.create({
+        await db.product.create({
           data: product,
         });
         console.log(`Added product: ${product.name}`);
@@ -160,5 +160,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }); 
