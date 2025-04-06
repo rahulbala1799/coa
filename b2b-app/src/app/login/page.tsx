@@ -36,12 +36,17 @@ export default function LoginPage() {
       // Store access token in localStorage
       localStorage.setItem('accessToken', data.accessToken);
       
-      // Redirect based on user role
-      if (data.user.role === 'ADMIN') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard');
-      }
+      // Store user data
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
+      // Redirect based on user role with a slight delay to ensure storage is complete
+      setTimeout(() => {
+        if (data.user.role === 'ADMIN') {
+          window.location.href = '/admin';
+        } else {
+          window.location.href = '/dashboard';
+        }
+      }, 100);
     } catch (err) {
       console.error('Login failed:', err);
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
